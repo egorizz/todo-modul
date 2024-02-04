@@ -1,24 +1,39 @@
 import React from "react";
 import "./footer.scss";
 
-const Footer = () => {
+const Footer = ({ toDo, filter, setFilter, clearCompleted }) => {
   return (
-    <footer class="footer">
-      <span class="todo-count">1 items left</span>
-      <ul class="filters">
+    <footer className="footer">
+      <span className="todo-count">{toDo} items left</span>
+      <ul className="filters">
         <li>
-          <button class="selected">All</button>
+          <button
+            className={filter == "all" ? "selected" : ""}
+            onClick={() => setFilter("all")}
+          >
+            All
+          </button>
         </li>
         <li>
-          <button>Active</button>
+          <button
+            className={filter == "active" ? "selected" : ""}
+            onClick={() => setFilter("active")}
+          >
+            Active
+          </button>
         </li>
         <li>
-          <button>Completed</button>
+          <button
+            className={filter == "completed" ? "selected" : ""}
+            onClick={() => setFilter("completed")}
+          >
+            Completed
+          </button>
         </li>
       </ul>
-      <button class="clear-completed">Clear completed</button>
+      <button className="clear-completed" onClick={() => clearCompleted()}>Clear completed</button>
     </footer>
   );
 };
 
-export default Footer
+export default Footer;
