@@ -1,61 +1,67 @@
-import "./task.scss";
-import { formatDistanceToNow } from "date-fns";
+import './task.scss'
+import { formatDistanceToNow } from 'date-fns'
+import PropTypes from 'prop-types'
 
-const Task = ({ description, created, id, switchComplete, deleteTask, mode = "view" }) => {
-  if (mode == "view") {
+const Task = ({ task, switchComplete, deleteTask, mode }) => {
+  if (mode === 'view') {
     return (
       <li>
-        <div class="view">
-          <input class="toggle" type="checkbox" onClick={() => switchComplete(id)} />
+        <div className="view">
+          <input className="toggle" type="checkbox" onClick={() => switchComplete(task.id)} />
           <label>
-            <span class="description">{description}</span>
-            <span class="created">
-              created {formatDistanceToNow(created)} ago
-            </span>
+            <span className="description">{task.description}</span>
+            <span className="created">created {formatDistanceToNow(task.created)} ago</span>
           </label>
-          <button class="icon icon-edit"></button>
-          <button class="icon icon-destroy" onClick={() => deleteTask(id) }></button>
+          <button className="icon icon-edit"></button>
+          <button className="icon icon-destroy" onClick={() => deleteTask(task.id)}></button>
         </div>
       </li>
-    );
-  } else if (mode == "edit") {
+    )
+  } else if (mode === 'edit') {
     return (
-      <li class="editing">
-        <div class="view">
-          <input class="toggle" type="checkbox" onClick={() => switchComplete(id)} />
+      <li className="editing">
+        <div className="view">
+          <input className="toggle" type="checkbox" onClick={() => switchComplete(task.id)} />
           <label>
-            <span class="description">{description}</span>
-            <span class="created">
-              created {formatDistanceToNow(created)} ago
-            </span>
+            <span className="description">{task.description}</span>
+            <span className="created">created {formatDistanceToNow(task.created)} ago</span>
           </label>
-          <button class="icon icon-edit"></button>
-          <button class="icon icon-destroy" onClick={() => deleteTask(id) }></button>
+          <button className="icon icon-edit"></button>
+          <button className="icon icon-destroy" onClick={() => deleteTask(task.id)}></button>
         </div>
-        <input type="text" class="edit" value="Editing task" />
+        <input type="text" className="edit" value="Editing task" />
       </li>
-    );
+    )
   }
   return (
-    <li class="completed">
-      <div class="view">
-        <input
-          class="toggle"
-          type="checkbox"
-          checked
-          onClick={() => switchComplete(id)}
-        />
+    <li className="completed">
+      <div className="view">
+        <input className="toggle" type="checkbox" defaultChecked onClick={() => switchComplete(task.id)} />
         <label>
-          <span class="description">{description}</span>
-          <span class="created">
-            created {formatDistanceToNow(created)} ago
-          </span>
+          <span className="description">{task.description}</span>
+          <span className="created">created {formatDistanceToNow(task.created)} ago</span>
         </label>
-        <button class="icon icon-edit"></button>
-        <button class="icon icon-destroy" onClick={() => deleteTask(id) }></button>
+        <button className="icon icon-edit"></button>
+        <button className="icon icon-destroy" onClick={() => deleteTask(task.id)}></button>
       </div>
     </li>
-  );
-};
+  )
+}
 
-export default Task;
+Task.propTypes = {
+  task: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    complete: PropTypes.bool.isRequired,
+    created: PropTypes.instanceOf(Date).isRequired,
+  }).isRequired,
+  switchComplete: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func.isRequired,
+  mode: PropTypes.oneOf(['view', 'edit', 'completed']),
+}
+
+Task.defaultProps = {
+  mode: 'view',
+}
+
+export default Task

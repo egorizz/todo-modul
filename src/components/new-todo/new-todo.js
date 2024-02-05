@@ -1,48 +1,21 @@
-import React, { useState } from "react";
-import "./new-todo.scss";
+import React, { useState } from 'react'
+import './new-todo.scss'
+import PropTypes from 'prop-types'
 
-// const NewTodo = () => {
-//   state = {
-//     label: "",
-//   };
-
-//   onLabelChange = (e) => {
-//     this.useState({ label: e.target.value });
-//   };
-
-//   onSubmit = (e) => {
-//     e.preventDefault();
-//     this.props.onItemAdded(this.state.label);
-//     this.useState({ label: "" });
-//   };
-
-//   return (
-//     <input
-//       type="text"
-//       className="new-todo"
-//       onSubmit={this.onSubmit}
-//       onChange={this.onLabelChange}
-//       placeholder="What needs to be done?"
-//       value={this.state.label}
-//       autofocus
-//     />
-//   );
-// };
-
-const NewTodo = (props) => {
-  const [label, setLabel] = useState("");
+const NewTodo = ({ onItemAdded }) => {
+  const [label, setLabel] = useState('')
 
   const onLabelChange = (e) => {
-    setLabel(e.target.value);
-  };
+    setLabel(e.target.value)
+  }
 
   const onSubmit = (e) => {
-    e.preventDefault();
-    if (label.trim() !== "") {
-      props.onItemAdded(label);
-      setLabel("");
+    e.preventDefault()
+    if (label.trim() !== '') {
+      onItemAdded(label)
+      setLabel('')
     }
-  };
+  }
 
   return (
     <form onSubmit={onSubmit}>
@@ -55,7 +28,11 @@ const NewTodo = (props) => {
         autoFocus
       />
     </form>
-  );
-};
+  )
+}
 
-export default NewTodo;
+NewTodo.propTypes = {
+  onItemAdded: PropTypes.func.isRequired,
+}
+
+export default NewTodo

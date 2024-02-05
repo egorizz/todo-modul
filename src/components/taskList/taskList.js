@@ -1,31 +1,47 @@
-import React from "react";
-import "./taskList.scss";
-import Task from "../task";
+import React from 'react'
+import './taskList.scss'
+import PropTypes from 'prop-types'
+
+import Task from '../task'
 
 const TaskList = ({ tasks, switchComplete, deleteTask, filter }) => {
   return (
-    <ul class="todo-list">
+    <ul className="todo-list">
       {tasks
         .filter((task) => {
           return (
-            filter === "all" ||
-            (filter === "active" && !task.complete) ||
-            (filter === "completed" && task.complete)
-          );
+            filter === 'all' || (filter === 'active' && !task.complete) || (filter === 'completed' && task.complete)
+          )
         })
         .map((task) => (
           <Task
             deleteTask={deleteTask}
             key={task.id}
             switchComplete={switchComplete}
-            id={task.id}
-            description={task.description}
-            created={task.created}
-            mode={task.complete ? "completed" : "view"}
+            task={task}
+            mode={task.complete ? 'completed' : 'view'}
           />
         ))}
     </ul>
-  );
-};
+  )
+}
 
-export default TaskList;
+TaskList.propTypes = {
+  tasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      description: PropTypes.string.isRequired,
+      complete: PropTypes.bool.isRequired,
+      created: PropTypes.instanceOf(Date).isRequired,
+    })
+  ),
+  switchComplete: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func.isRequired,
+  filter: PropTypes.oneOf(['all', 'active', 'completed']).isRequired,
+}
+
+TaskList.defaultProps = {
+  tasks: [],
+}
+
+export default TaskList

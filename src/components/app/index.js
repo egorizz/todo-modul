@@ -1,3 +1,3 @@
-import HtmlTodo from "./app";
+import HtmlTodo from './app'
 
 export default HtmlTodo
