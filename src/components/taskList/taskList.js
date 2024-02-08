@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 import Task from '../task'
 
-const TaskList = ({ tasks, switchComplete, deleteTask, filter }) => {
+const TaskList = ({ tasks, editTask, switchComplete, deleteTask, filter }) => {
   return (
     <ul className="todo-list">
       {tasks
@@ -19,6 +19,7 @@ const TaskList = ({ tasks, switchComplete, deleteTask, filter }) => {
             key={task.id}
             switchComplete={switchComplete}
             task={task}
+            editTask={editTask}
             mode={task.complete ? 'completed' : 'view'}
           />
         ))}

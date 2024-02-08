@@ -40,14 +40,23 @@ const HtmlTodo = () => {
   }
 
   const deleteTask = (id) => {
+    setTasks((oldTasks) => oldTasks.filter((task) => task.id !== id))
+  }
+
+  const editTask = (id, newDescription) => {
     setTasks((oldTasks) => {
-      const newTasks = oldTasks.filter((task) => task.id !== id)
+      const newTasks = oldTasks.map((task) => {
+        if (task.id === id) {
+          return { ...task, description: newDescription }
+        }
+        return task
+      })
       return newTasks
     })
   }
 
   const addItem = (text) => {
-    const lastId = Math.max(...tasks.map((task) => task.id))
+    const lastId = tasks.length > 0 ? Math.max(...tasks.map((task) => task.id)) : 0
     const newItem = { id: lastId + 1, description: text, complete: false, created: new Date() }
     setTasks((oldTasks) => [...oldTasks, newItem])
   }
@@ -66,7 +75,13 @@ const HtmlTodo = () => {
         <NewTodo onItemAdded={addItem} />
       </header>
       <section className="main">
-        <TaskList tasks={tasks} switchComplete={switchComplete} deleteTask={deleteTask} filter={filter} />
+        <TaskList
+          tasks={tasks}
+          switchComplete={switchComplete}
+          deleteTask={deleteTask}
+          editTask={editTask}
+          filter={filter}
+        />
         <Footer
           numActive={todoCount}
           done={doneCount}
