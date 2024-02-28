@@ -9,26 +9,7 @@ import AppHeader from '../app-header'
 const HtmlTodo = () => {
   const [filter, setFilter] = useState('all')
 
-  const [tasks, setTasks] = useState([
-    {
-      description: 'Completed task',
-      complete: true,
-      created: new Date('2024-01-25'),
-      id: 1,
-    },
-    {
-      description: 'Editing task',
-      complete: false,
-      created: new Date('2024-01-25'),
-      id: 2,
-    },
-    {
-      description: 'Active task',
-      complete: true,
-      created: new Date('2024-01-25'),
-      id: 3,
-    },
-  ])
+  const [tasks, setTasks] = useState([])
 
   const switchComplete = (id) => {
     setTasks((oldTasks) => {
@@ -55,9 +36,17 @@ const HtmlTodo = () => {
     })
   }
 
-  const addItem = (text) => {
+  // Внутри HtmlTodo
+
+  const addItem = (text, timeSeconds) => {
     const lastId = tasks.length > 0 ? Math.max(...tasks.map((task) => task.id)) : 0
-    const newItem = { id: lastId + 1, description: text, complete: false, created: new Date() }
+    const newItem = {
+      id: lastId + 1,
+      description: text,
+      complete: false,
+      created: new Date(),
+      timeSeconds, // добавляем это новое свойство
+    }
     setTasks((oldTasks) => [...oldTasks, newItem])
   }
 
@@ -82,13 +71,7 @@ const HtmlTodo = () => {
           editTask={editTask}
           filter={filter}
         />
-        <Footer
-          numActive={todoCount}
-          done={doneCount}
-          filter={filter}
-          setFilter={setFilter}
-          clearCompleted={clearCompleted}
-        />
+        <Footer numActive={todoCount} filter={filter} setFilter={setFilter} clearCompleted={clearCompleted} />
       </section>
     </section>
   )

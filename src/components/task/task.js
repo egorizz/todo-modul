@@ -1,11 +1,48 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './task.scss'
 import { formatDistanceToNow } from 'date-fns'
 import PropTypes from 'prop-types'
 
-const Task = ({ task, switchComplete, deleteTask, editTask }) => {
+const Task = ({ task, switchComplete, deleteTask, editTask, hide = false }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editedText, setEditedText] = useState(task.description)
+  // Внимание, используем task.timeSeconds для инициализации таймера
+  const [timer, setTimer] = useState(task.timeSeconds || 720) // Устанавливаем значение по умолчанию на 720, если timeSeconds отсутствует
+
+  const [timerOn, setTimerOn] = useState(false)
+
+  useEffect(() => {
+    let interval = null
+
+    if (timerOn && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prevTime) => prevTime - 1)
+      }, 1000)
+    } else if (!timerOn || timer <= 0) {
+      clearInterval(interval)
+      if (timer <= 0) {
+        setTimerOn(false) // Automatically stop the timer when it reaches 0
+      }
+    }
+
+    return () => clearInterval(interval)
+  }, [timerOn, timer])
+
+  const toggleTimer = () => {
+    // Проверяем, завершена ли задача; если нет, переключаем таймер
+    if (task.complete) {
+      return
+    }
+    setTimerOn(!timerOn)
+  }
+
+  useEffect(() => {
+    // Обнуление таймера для завершённых задач
+    if (task.complete) {
+      setTimerOn(false)
+      setTimer(0)
+    }
+  }, [task.complete])
 
   const handleEdit = () => {
     if (!task.complete) {
@@ -27,13 +64,24 @@ const Task = ({ task, switchComplete, deleteTask, editTask }) => {
     setEditedText(e.target.value)
   }
 
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60)
+    const seconds = time % 60
+    return ` ${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
+  }
+
   return (
-    <li className={`${isEditing ? 'editing' : task.complete ? 'completed' : ''}`}>
+    <li className={`${isEditing ? 'editing' : task.complete ? 'completed' : ''} ${hide ? 'todo-hide' : ''}`}>
       <div className="view">
         <input className="toggle" type="checkbox" checked={task.complete} onChange={() => switchComplete(task.id)} />
         <label>
-          <span className="description">{task.description}</span>
-          <span className="created">created {formatDistanceToNow(task.created)} ago</span>
+          <span className="title">{task.description}</span>
+          <span className="description">
+            <button className="icon icon-play" onClick={toggleTimer}></button>
+            <button className="icon icon-pause" onClick={toggleTimer}></button>
+            {formatTime(timer)}
+          </span>
+          <span className="description">created {formatDistanceToNow(new Date(task.created))} ago</span>
         </label>
         <button className="icon icon-edit" onClick={handleEdit}></button>
         <button className="icon icon-destroy" onClick={() => deleteTask(task.id)}></button>
