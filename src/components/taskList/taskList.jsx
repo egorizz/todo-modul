@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import './taskList.scss'
 import PropTypes from 'prop-types'
 
@@ -8,22 +8,25 @@ const isVisible = (task, filter) => {
   return filter === 'all' || (filter === 'active' && !task.complete) || (filter === 'completed' && task.complete)
 }
 
-const TaskList = ({ tasks, editTask, switchComplete, deleteTask, filter }) => {
-  return (
-    <ul className="todo-list">
-      {tasks.map((task) => (
-        <Task
-          deleteTask={deleteTask}
-          key={task.id}
-          switchComplete={switchComplete}
-          task={task}
-          editTask={editTask}
-          mode={task.complete ? 'completed' : 'view'}
-          hide={!isVisible(task, filter)}
-        />
-      ))}
-    </ul>
-  )
+class TaskList extends Component {
+  render() {
+    const { tasks, editTask, switchComplete, deleteTask, filter } = this.props
+    return (
+      <ul className="todo-list">
+        {tasks.map((task) => (
+          <Task
+            deleteTask={deleteTask}
+            key={task.id}
+            switchComplete={switchComplete}
+            task={task}
+            editTask={editTask}
+            mode={task.complete ? 'completed' : 'view'}
+            hide={!isVisible(task, filter)}
+          />
+        ))}
+      </ul>
+    )
+  }
 }
 
 TaskList.propTypes = {
