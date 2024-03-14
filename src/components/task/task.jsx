@@ -3,6 +3,12 @@ import './task.scss'
 import { formatDistanceToNow } from 'date-fns'
 import PropTypes from 'prop-types'
 
+function formatTime(time) {
+  const minutes = Math.floor(time / 60)
+  const seconds = time % 60
+  return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
+}
+
 class Task extends Component {
   constructor(props) {
     super(props)
@@ -79,12 +85,6 @@ class Task extends Component {
     this.setState({ editedText: e.target.value })
   }
 
-  formatTime = (time) => {
-    const minutes = Math.floor(time / 60)
-    const seconds = time % 60
-    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
-  }
-
   render() {
     const { task, switchComplete, deleteTask, hide } = this.props
     const { isEditing, editedText, timer } = this.state
@@ -95,14 +95,14 @@ class Task extends Component {
           <label>
             <span className="title">{task.description}</span>
             <span className="description">
-              <button className="icon icon-play" onClick={this.toggleTimer}></button>
-              <button className="icon icon-pause" onClick={this.toggleTimer}></button>
-              {this.formatTime(timer)}
+              <button className="icon icon-play" onClick={this.toggleTimer} />
+              <button className="icon icon-pause" onClick={this.toggleTimer} />
+              {formatTime(timer)}
             </span>
             <span className="description">created {formatDistanceToNow(new Date(task.created))} ago</span>
           </label>
-          <button className="icon icon-edit" onClick={this.handleEdit}></button>
-          <button className="icon icon-destroy" onClick={() => deleteTask(task.id)}></button>
+          <button className="icon icon-edit" onClick={this.handleEdit} />
+          <button className="icon icon-destroy" onClick={() => deleteTask(task.id)} />
         </div>
         {isEditing && (
           <input
@@ -123,11 +123,13 @@ class Task extends Component {
 Task.propTypes = {
   task: PropTypes.shape({
     id: PropTypes.number.isRequired,
+    timeSeconds: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
     complete: PropTypes.bool.isRequired,
     created: PropTypes.instanceOf(Date).isRequired,
   }).isRequired,
   switchComplete: PropTypes.func.isRequired,
+  hide: PropTypes.bool.isRequired,
   deleteTask: PropTypes.func.isRequired,
   editTask: PropTypes.func.isRequired,
 }

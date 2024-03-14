@@ -17,14 +17,14 @@ class NewTodo extends Component {
   }
 
   onMinutesChange = (e) => {
-    const value = e.target.value
+    const { value } = e.target
     if (value === '' || /^[0-9\b]+$/.test(value)) {
       this.setState({ minutes: value })
     }
   }
 
   onSecondsChange = (e) => {
-    const value = e.target.value
+    const { value } = e.target
     if (value === '' || /^[0-9\b]+$/.test(value)) {
       this.setState({ seconds: value })
     }
@@ -34,7 +34,7 @@ class NewTodo extends Component {
     e.preventDefault()
     const { label, minutes, seconds } = this.state
     if (label.trim() !== '') {
-      const totalSeconds = parseInt(minutes || '0') * 60 + parseInt(seconds || '0')
+      const totalSeconds = parseInt(minutes || '0', 10) * 60 + parseInt(seconds || '0', 10)
       this.props.onItemAdded(label, totalSeconds)
       this.setState({ label: '', minutes: '', seconds: '' })
     }
@@ -54,7 +54,7 @@ class NewTodo extends Component {
         />
         <input className="new-todo-form__timer" onChange={this.onMinutesChange} placeholder="Min" value={minutes} />
         <input className="new-todo-form__timer" onChange={this.onSecondsChange} placeholder="Sec" value={seconds} />
-        <button type="submit" style={{ display: 'none' }}></button>
+        <button type="submit" style={{ display: 'none' }} />
       </form>
     )
   }

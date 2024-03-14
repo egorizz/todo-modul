@@ -4,9 +4,8 @@ import PropTypes from 'prop-types'
 
 import Task from '../task'
 
-const isVisible = (task, filter) => {
-  return filter === 'all' || (filter === 'active' && !task.complete) || (filter === 'completed' && task.complete)
-}
+const isVisible = (task, filter) =>
+  filter === 'all' || (filter === 'active' && !task.complete) || (filter === 'completed' && task.complete)
 
 class TaskList extends Component {
   render() {
@@ -40,6 +39,7 @@ TaskList.propTypes = {
   ),
   switchComplete: PropTypes.func.isRequired,
   deleteTask: PropTypes.func.isRequired,
+  editTask: PropTypes.func.isRequired,
   filter: PropTypes.oneOf(['all', 'active', 'completed']).isRequired,
 }
 
