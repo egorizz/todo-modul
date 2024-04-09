@@ -10,7 +10,7 @@
   ],
   "rules": {
     "no-plusplus": "off",
-    "prettier/prettier": "error",
+    "prettier/prettier": "0",
     "react/jsx-filename-extension": [
       "error",
       {
