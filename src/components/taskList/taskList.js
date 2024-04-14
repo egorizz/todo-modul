@@ -20,7 +20,7 @@ const TaskList = ({ tasks, editTask, switchComplete, deleteTask, filter }) => {
             switchComplete={switchComplete}
             task={task}
             editTask={editTask}
-            mode={task.complete ? 'completed' : 'view'}
+            mode={task.complete ? 'completed' : 'view'} 
           />
         ))}
     </ul>
